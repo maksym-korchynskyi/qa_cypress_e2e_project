@@ -6,17 +6,17 @@ import ArticlePageObject from '../support/pages/article.pageObject';
 import EditorArticlePageObject from '../support/pages/editorArticle.pageObject';
 
 describe('Article', () => {
+  let user;
   let profilePage;
   const editorArticlePage = new EditorArticlePageObject();
 
   beforeEach(() => {
     cy.task('db:clear');
 
-    cy.registerAndLogin()
-      .as('user')
-      .then(({ username }) => {
-        profilePage = new ProfilePageObject(username);
-      });
+    cy.registerAndLogin().then((generatedUser) => {
+      user = generatedUser;
+      profilePage = new ProfilePageObject(user.username);
+    });
   });
 
   it('should be created using New Article form', () => {
@@ -33,7 +33,7 @@ describe('Article', () => {
   });
 
   it('should be edited using Edit button', function () {
-    cy.createArticle(this.user.id).then(({ title }) => {
+    cy.createArticle(user.id).then(({ title }) => {
       const articlePage = new ArticlePageObject(title);
 
       articlePage.visit();
@@ -52,7 +52,7 @@ describe('Article', () => {
   });
 
   it('should be deleted using Delete button', function () {
-    cy.createArticle(this.user.id).then(({ title }) => {
+    cy.createArticle(user.id).then(({ title }) => {
       const articlePage = new ArticlePageObject(title);
 
       articlePage.visit();

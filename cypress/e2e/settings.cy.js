@@ -7,19 +7,19 @@ import ProfilePageObject from '../support/pages/profile.pageObject.js';
 import SettingsPageObject from '../support/pages/settings.pageObject.js';
 
 describe('Settings page', () => {
+  let user;
   let profilePage;
   const settingsPage = new SettingsPageObject();
 
   beforeEach(() => {
     cy.task('db:clear');
 
-    cy.registerAndLogin()
-      .as('user')
-      .then(({ username }) => {
-        profilePage = new ProfilePageObject(username);
+    cy.registerAndLogin().then((generatedUser) => {
+      user = generatedUser;
+      profilePage = new ProfilePageObject(user.username);
 
-        settingsPage.visit();
-      });
+      settingsPage.visit();
+    });
   });
 
   it('should provide an ability to update username', () => {
@@ -46,7 +46,7 @@ describe('Settings page', () => {
       settingsPage.typeEmail(email);
       settingsPage.clickOnUpdateButtonAndWait();
 
-      cy.login(email, this.user.password).should((response) => {
+      cy.login(email, user.password).should((response) => {
         expect(response.status).to.eq(200);
       });
     });
@@ -57,7 +57,7 @@ describe('Settings page', () => {
       settingsPage.typePassword(password);
       settingsPage.clickOnUpdateButtonAndWait();
 
-      const email = this.user.email;
+      const email = user.email;
 
       cy.login(email, password).should((response) => {
         expect(response.status).to.eq(200);

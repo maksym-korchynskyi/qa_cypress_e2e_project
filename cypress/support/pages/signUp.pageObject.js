@@ -20,15 +20,15 @@ class SignUpPageObject extends PageObject {
   }
 
   typeUsername(username) {
-    this.usernameField.type(username);
+    return this.usernameField.type(username);
   }
 
   typeEmail(email) {
-    this.emailField.type(email);
+    return this.emailField.type(email);
   }
 
   typePassword(password) {
-    this.passwordField.type(password);
+    return this.passwordField.type(password);
   }
 
   fillForm({ username, email, password }) {
@@ -38,7 +38,7 @@ class SignUpPageObject extends PageObject {
   }
 
   clickOnSubmitButton() {
-    this.submitButton.click();
+    return this.submitButton.click();
   }
 }
 
